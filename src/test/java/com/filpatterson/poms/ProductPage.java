@@ -37,6 +37,14 @@ public class ProductPage {
     @FindBy(xpath = "//*[@id='horizontalTab']/div/div[2]/div/div/div[2]/form/input[3]")
     public WebElement reviewFormSendButton;
 
+    //  reference to pincode input field
+    @FindBy(xpath = "/html/body/div[7]/div/div[2]/div[2]/form/input[1]")
+    public WebElement pincodeInputField;
+
+    //  reference to pincode send button
+    @FindBy(xpath = "/html/body/div[7]/div/div[2]/div[2]/form/input[2]")
+    public WebElement pincodeSendButton;
+
     //  reference to used driver
     public WebDriver driver;
 
@@ -58,6 +66,10 @@ public class ProductPage {
 
     public void clickOnSendReviewButton(){
         reviewFormSendButton.click();
+    }
+
+    public void clickOnPincodeSendButton(){
+        pincodeSendButton.click();
     }
 
     /**
@@ -87,5 +99,18 @@ public class ProductPage {
             addingReviewMessageInputField.clear();
             addingReviewMessageInputField.sendKeys(message);
         }
+    }
+
+    /**
+     * function for sending pincode to form for checking
+     * @param pincode pincode value for checking
+     */
+    public void inputPincodeForChecking(String pincode) {
+        //  wait until form will display fields for entering credentials
+        WebDriverWait wait = new WebDriverWait(driver, 15);
+        wait.until(ExpectedConditions.visibilityOf(pincodeInputField));
+
+        pincodeInputField.clear();
+        pincodeInputField.sendKeys(pincode);
     }
 }
