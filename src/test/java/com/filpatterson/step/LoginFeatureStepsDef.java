@@ -1,7 +1,7 @@
 package com.filpatterson.step;
 
 
-import com.filpatterson.poms.MainPage;
+import com.filpatterson.poms.ContactPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -9,6 +9,8 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.Assert;
+import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -19,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 public class LoginFeatureStepsDef {
+    //  driver for performing all web-actions and interaction
     static WebDriver driver = initDriver();
-    static String currentUrl;
-    static MainPage mp;
+
+    //  instance of web-page prototype
+    static ContactPage contactPage;
 
     /**
      * Method for initialization of web driver that will visit the page and perform all required actions
@@ -39,66 +43,79 @@ public class LoginFeatureStepsDef {
     public void openWebShopPage() {
         //  init poms for the page containing prototypes of required elements
         // also send driver reference for navigating through web-page
-        mp = new MainPage(driver);
+        contactPage = new ContactPage(driver);
 
         //  get to the required page
-        driver.get("https://loving-hermann-e2094b.netlify.app/contact.html");
+        driver.get(contactPage.url);
         driver.manage().window().maximize();
-        currentUrl = driver.getCurrentUrl();
     }
 
     /**
      * Press authentication button on top-navigation menu
      */
     @When("press button with text 'Sign in'")
+    @Test
     public void pressButtonWithText() {
-        mp.clickOnSignIn();
+        Assert.assertNotNull(contactPage.signInButton);
+        contactPage.clickOnSignIn();
     }
 
     /**
      * Check if after pressing authentication button has appeared authentication form
      */
     @Then("appears authentication form")
+    @Test
     public void appearsAuthenticationForm() {
         //  wait until form will display fields for entering credentials
         WebDriverWait wait = new WebDriverWait(driver, 15);
-        wait.until(ExpectedConditions.visibilityOf(mp.signInPopupForm));
+        wait.until(ExpectedConditions.visibilityOf(contactPage.signInPopupForm));
 
-        //  show if form is displayed on page
-        System.out.println("form is shown? " + mp.signInPopupForm.isDisplayed());
+        //  check if form is shown on page
+        Assert.assertTrue(contactPage.signInPopupForm.isDisplayed());
     }
 
     /**
      * Input user credentials defined in feature as data table to authentication form
-     * @param dt
+     * @param dt datatable defined in feature file
      */
     @And("user logs in with name and email:")
+    @Test
     public void userLogsInWithNameAndEmail(DataTable dt) {
+        //  get elements from datatable in feature file
         List<Map<String, String>> ListOfMaps = dt.asMaps(String.class, String.class);
         Map<String, String> data = ListOfMaps.get(0);
 
-        mp.loginWithNameEmail(data);
+        //  check if there are fields that can be filled with data
+        Assert.assertNotNull(contactPage.signInPopupNameInputField);
+        Assert.assertNotNull(contactPage.signInPopupEmailInputField);
+
+        //  perform authentication to page
+        contactPage.loginWithNameEmail(data);
     }
 
     /**
      * Perform sign in to the platform with already inserted credentials
-     * @throws Throwable
      */
     @And("press button with value 'SIGN IN'")
-    public void pressButtonWithValue() throws Throwable {
-        mp.signInPopupSignInButton.click();
+    @Test
+    public void pressButtonWithValue() {
+        Assert.assertNotNull(contactPage.signInPopupSignInButton);
+        contactPage.clickOnPSignInPopupSignIn();
     }
 
+    /**
+     * Check for non-appearance of 404 error
+     */
     @Then("appears page with successful authentication")
+    @Test
     public void appearsPageWithSuccessfulAuthentication() {
-        //  wait until form will display fields for entering credentials
-        WebDriverWait wait = new WebDriverWait(driver, 5);
-        wait.until(ExpectedConditions.titleIs("Page Not Found"));
-
-        System.out.println(driver.getTitle());
-        System.out.println(driver.findElements(By.xpath("//*[text()='404']")).size());
+        //  check if there is no 404 notification on the page
+        Assert.assertEquals(0, driver.findElements(By.xpath("//p[contains(text(), '404')]")).size());
     }
 
+    /**
+     * step to perform after all mentioned above
+     */
     @After
     public void afterScenario() {
         driver.quit();
