@@ -62,6 +62,14 @@ public class ContactPage {
     @FindBy(xpath = "//*[@id='myModal2']/div/div")
     public WebElement signUpPopupForm;
 
+    //  reference to input search field
+    @FindBy(xpath = "/html/body/div[2]/div/div[1]/form/input[1]")
+    public WebElement searchInputField;
+
+    //  reference to search button
+    @FindBy(xpath = "/html/body/div[2]/div/div[1]/form/input[2]")
+    public WebElement searchButton;
+
     //  reference to used driver
     public WebDriver driver;
 
@@ -103,6 +111,13 @@ public class ContactPage {
     }
 
     /**
+     * click on search button
+     */
+    public void clickOnSearchButton(){
+        searchButton.click();
+    }
+
+    /**
      * function for logging in using name and email
      * @param map map containing datatable with name and email
      */
@@ -128,7 +143,7 @@ public class ContactPage {
 
     /**
      * function for registration using name and email
-     * @param map map containing datatable with name and email
+     * @param map map containing datatable with name, email and password
      */
     public void registrateWithNameEmailPassword(Map<String, String> map) {
         //  get user credentials required to enter to the login page
@@ -155,5 +170,17 @@ public class ContactPage {
             signUpPopupConfirmPasswordInputField.clear();
             signUpPopupConfirmPasswordInputField.sendKeys(password);
         }
+    }
+
+    /**
+     * function for searching information on platform
+     */
+    public void inputSearchQueryInSearchField(String searchQuery) {
+        //  wait until form will display fields for entering credentials
+        WebDriverWait wait = new WebDriverWait(driver, 15);
+        wait.until(ExpectedConditions.visibilityOf(searchInputField));
+
+        searchInputField.clear();
+        searchInputField.sendKeys(searchQuery);
     }
 }
