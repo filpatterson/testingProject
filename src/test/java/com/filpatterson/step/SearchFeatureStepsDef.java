@@ -1,7 +1,6 @@
 package com.filpatterson.step;
 
 import com.filpatterson.poms.ContactPage;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
