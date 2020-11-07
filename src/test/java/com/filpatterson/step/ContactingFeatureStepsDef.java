@@ -6,7 +6,6 @@ import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.Assert;
 import org.junit.Test;
@@ -75,7 +74,7 @@ public class ContactingFeatureStepsDef {
         Assert.assertNotNull(contactPage.contactingSubjectInputField);
         Assert.assertNotNull(contactPage.contactingMessageInputField);
 
-        //  perform authentication to page
+        //  send contact information to contacting form
         contactPage.inputContactingInformation(data);
     }
 

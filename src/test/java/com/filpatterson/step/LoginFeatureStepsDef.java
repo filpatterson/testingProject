@@ -89,7 +89,7 @@ public class LoginFeatureStepsDef {
         Assert.assertNotNull(contactPage.signInPopupNameInputField);
         Assert.assertNotNull(contactPage.signInPopupEmailInputField);
 
-        //  perform authentication to page
+        //  send authentication info to page
         contactPage.loginWithNameEmail(data);
     }
 

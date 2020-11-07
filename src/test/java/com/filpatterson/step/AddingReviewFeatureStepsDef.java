@@ -1,6 +1,6 @@
 package com.filpatterson.step;
 
-import com.filpatterson.poms.ContactPage;
+import com.filpatterson.poms.ProductPage;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -19,12 +19,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.Map;
 
-public class RegistrationFeatureStepsDef {
+public class AddingReviewFeatureStepsDef {
     //  driver for performing all web-actions and interaction
     static WebDriver driver = initDriver();
 
     //  instance of web-page prototype
-    static ContactPage contactPage;
+    static ProductPage productPage;
 
     /**
      * Method for initialization of web driver that will visit the page and perform all required actions
@@ -38,48 +38,39 @@ public class RegistrationFeatureStepsDef {
     /**
      * Open web-shop page and show it
      */
-    @Given("open web-shop page for registration")
-    public void openWebShopPageForRegistration() {
+    @Given("open web-shop product page with review section")
+    @Test
+    public void openWebShopProductPageWithReviewSection() {
         //  init poms for the page containing prototypes of required elements
         // also send driver reference for navigating through web-page
-        contactPage = new ContactPage(driver);
+        productPage = new ProductPage(driver);
 
         //  get to the required page
-        driver.get(contactPage.url);
+        driver.get(productPage.url);
         driver.manage().window().maximize();
-    }
 
-    /**
-     * Press registration button on top-navigation menu
-     */
-    @When("press button with text 'Sign up'")
-    @Test
-    public void pressButtonWithTextSignUp() {
-        Assert.assertNotNull(contactPage.signUpButton);
-        contactPage.clickOnSignUp();
-    }
-
-    /**
-     * Check if after pressing registration button has appeared registration form
-     */
-    @Then("appears registration form")
-    @Test
-    public void appearsAuthenticationForm() {
         //  wait until form will display fields for entering credentials
         WebDriverWait wait = new WebDriverWait(driver, 15);
-        wait.until(ExpectedConditions.visibilityOf(contactPage.signUpPopupForm));
+        wait.until(ExpectedConditions.visibilityOf(productPage.reviewSection));
 
         //  check if form is shown on page
-        Assert.assertTrue(contactPage.signUpPopupForm.isDisplayed());
+        Assert.assertTrue(productPage.reviewSection.isDisplayed());
+    }
+
+
+    @When("user clicks on 'review' field")
+    @Test
+    public void userClicksOnReviewField() {
+        productPage.clickOnReviewSectionButton();
     }
 
     /**
-     * Input user credentials defined in feature as data table to registration form
+     * Input name, email and message to the review form
      * @param dt datatable defined in feature file
      */
-    @And("user inputs name, email, password and confirms password:")
+    @And("user inputs name, email and message to review form:")
     @Test
-    public void userInputsNameEmailPasswordAndConfirmsPassword(DataTable dt) {
+    public void userInputsNameEmailAndMessageToReviewForm(DataTable dt) {
         //  get elements from datatable in feature file
         List<Map<String, String>> ListOfMaps = dt.asMaps(String.class, String.class);
         Map<String, String> data = ListOfMaps.get(0);
@@ -87,31 +78,30 @@ public class RegistrationFeatureStepsDef {
         System.out.println(data.toString());
 
         //  check if there are fields that can be filled with data
-        Assert.assertNotNull(contactPage.signUpPopupNameInputField);
-        Assert.assertNotNull(contactPage.signUpPopupEmailInputField);
-        Assert.assertNotNull(contactPage.signUpPopupPasswordInputField);
-        Assert.assertNotNull(contactPage.signUpPopupConfirmPasswordInputField);
+        Assert.assertNotNull(productPage.addingReviewNameInputField);
+        Assert.assertNotNull(productPage.addingReviewEmailInputField);
+        Assert.assertNotNull(productPage.addingReviewMessageInputField);
 
-        //  send registration info to form
-        contactPage.registrateWithNameEmailPassword(data);
+        //  add information to review form
+        productPage.inputReviewNameEmailMessage(data);
     }
 
     /**
-     * Perform registration to the platform with already inserted credentials
+     * send review to page
      */
-    @And("press button with value 'SIGN UP'")
+    @And("press review form button with value 'SEND'")
     @Test
-    public void pressButtonWithValueSIGNUP() {
-        Assert.assertNotNull(contactPage.signInPopupSignInButton);
-        contactPage.clickOnSignUpPopupSignUp();
+    public void pressButtonWithValueSEND() {
+        Assert.assertNotNull(productPage.reviewFormSendButton);
+        productPage.clickOnSendReviewButton();
     }
 
     /**
      * Check for non-appearance of 404 error
      */
-    @Then("appears page with successful registration")
+    @Then("appears product page with attached review to it")
     @Test
-    public void appearsPageWithSuccessfulRegistration() {
+    public void appearsPageWithSuccessfulReviewDelivery() {
         //  check if there is no 404 notification on the page
         Assert.assertEquals(0, driver.findElements(By.xpath("//p[contains(text(), '404')]")).size());
     }
