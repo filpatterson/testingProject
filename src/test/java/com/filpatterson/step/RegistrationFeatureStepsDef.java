@@ -117,9 +117,9 @@ public class RegistrationFeatureStepsDef {
     }
 
     /**
-     * step to perform after all mentioned above
+     * hook that will be performed after finishing appended to this feature scenario
      */
-    @After
+    @After("@Registration")
     public void afterScenario() {
         driver.quit();
     }

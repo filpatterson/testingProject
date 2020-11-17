@@ -1,5 +1,6 @@
 Feature: test nr. 2, go to the page and try registration
 
+  @Registration
   Scenario: go through service to "Sign up" section and perform standard registration
     Given open web-shop page for registration
     When press button with text 'Sign up'

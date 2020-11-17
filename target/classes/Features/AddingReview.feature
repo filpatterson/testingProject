@@ -1,5 +1,6 @@
 Feature: test nr. 5, go to the product page and try adding review
 
+  @AddingReview
   Scenario: go through service to product page and try to add a review to it
     Given open web-shop product page with review section
     When user clicks on 'review' field

@@ -1,5 +1,6 @@
 Feature: test nr. 1, go to the page and try to authenticate
 
+  @Login
   Scenario: go through service to "Sign in" section and perform standard authentication
     Given open web-shop page
     When press button with text 'Sign in'

@@ -1,5 +1,6 @@
 Feature: test nr. 4, go to the page and try to contacting
 
+  @Contacting
   Scenario: go through service to contact section and try to send message
     Given open web-shop page contact part and navigate to contact form
     When user inputs name, email, subject and message:
