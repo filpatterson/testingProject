@@ -39,6 +39,7 @@ public class RegistrationFeatureStepsDef {
      * Open web-shop page and show it
      */
     @Given("open web-shop page for registration")
+    @Test
     public void openWebShopPageForRegistration() {
         //  init poms for the page containing prototypes of required elements
         // also send driver reference for navigating through web-page
